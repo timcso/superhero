@@ -4,5 +4,5 @@ jQuery.getJSON('users', function( users ){
 
 //Check user
 function checkUser(){
-    //
+    console.log('check user');
 }
