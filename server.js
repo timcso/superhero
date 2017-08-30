@@ -5,18 +5,26 @@ var fs = require('fs')
 
 var port = 3333
 var staticDir = 'build'
+var viewDir = './src/view'
+
+app.set('view engine', 'jade')
+app.set('views', viewDir)
 
 app.use(function(req, res, next) {
-    console.log('request url: ', req.url );
-    next();
+    if (req.headers['x-requested-with'] == 'XMLHttpRequest'){
+      res.send( JSON.stringify( {'hello': 'world'}))
+    } else{
+     next();
+    }
 })
 
-app.use('/',express.static(staticDir));
+// app.use('/',express.static(staticDir));
 
 app.get('/', function (req, res) {
-    fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
-      res.send(data)
-    });
+    // fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
+    //   res.send(data)
+    // });
+    res.render('index', { title: 'Hellóka', message: 'Ma is alkottunk valamit!'})
 });
 
 function handleUsers(req, res) {

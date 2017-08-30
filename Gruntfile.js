@@ -14,8 +14,8 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-      files: ['src/**/*.js', 'src/**/*.html', 'src/**/*.css'],
-      tasks: ['uglify'],
+      files: ['src/**/*.js', 'src/**/*.html', 'src/**/*.css', 'src/**/*.jade'],
+      tasks: ['dev'],
       options: {
         spawn: false,
         }
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
 
   // Default task(s).
-  grunt.registerTask('dev', ['jshint', 'clean', 'copy', 'uglify', 'imagemin']);
+  grunt.registerTask('dev', ['jshint', 'clean', 'copy', 'uglify']);
   grunt.registerTask('default', ['watch']);
 
 };

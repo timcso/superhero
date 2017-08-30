@@ -12,7 +12,8 @@
         "grunt-contrib-clean": "",
         "grunt-contrib-jshint": "",
         "grunt-contrib-copy": "",
-        "grunt-contrib-imagemin": ""
+        "grunt-contrib-imagemin": "",
+        "jade": ""
     },
     "description": "My first package",
     "license": "MIT"
