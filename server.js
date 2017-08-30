@@ -1,10 +1,17 @@
 var express = require('express')
 var app = express()
 var fs = require('fs')
+// var itf = require('./my_modules/itf_module')
+
 var port = 3333
 var staticDir = 'build'
 
-app.use('/',express.static(staticDir))
+app.use(function(req, res, next) {
+    console.log('request url: ', req.url );
+    next();
+})
+
+app.use('/',express.static(staticDir));
 
 app.get('/', function (req, res) {
     fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
