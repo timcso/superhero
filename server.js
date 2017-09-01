@@ -1,11 +1,32 @@
 var express = require('express')
 var app = express()
 var fs = require('fs')
-// var itf = require('./my_modules/itf_module')
+//var itf = require('./my_modules/itf_module')
+
+/*var str = 'Hello new module!'
+//console.log(itf.tu(str));
+
+itf.tu(str, function(err, newStr){
+    if(err){
+        console.error(err);
+    }else {
+        console.log('New string is: ', newStr);
+    }
+})*/
 
 var port = 3333
 var staticDir = 'build'
 var viewDir = './src/view'
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test');
+
+// itf tábla model
+var itf = require('./models/itf')
+itf.setConnection(mongoose)
+itf.read( { 'name': 'Joe'}, function(data){
+    console.log(data);
+})
 
 app.set('view engine', 'jade')
 app.set('views', viewDir)
@@ -21,10 +42,10 @@ app.use(function(req, res, next) {
 // app.use('/',express.static(staticDir));
 
 app.get('/', function (req, res) {
-    // fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
-    //   res.send(data)
-    // });
-    res.render('index', { title: 'Hellóka', message: 'Ma is alkottunk valamit!'})
+    fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
+      res.send(data)
+    });
+    res.render('index', { title: 'Hellóka!!!!44', message: 'Ma is alkottunk valamit!'})
 });
 
 function handleUsers(req, res) {
