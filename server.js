@@ -1,6 +1,7 @@
 var express = require('express')
 var app = express()
 var fs = require('fs')
+var mongoose = require('mongoose');
 //var itf = require('./my_modules/itf_module')
 
 /*var str = 'Hello new module!'
@@ -14,19 +15,47 @@ itf.tu(str, function(err, newStr){
     }
 })*/
 
+mongoose.connect('mongodb://localhost/superhero');
+
+var Users = require('./models/users')
+Users.setConnection(mongoose)
+
 var port = 3333
 var staticDir = 'build'
 var viewDir = './src/view'
-var mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost/test');
 
 // itf tábla model
-var itf = require('./models/itf')
-itf.setConnection(mongoose)
-itf.read( { 'name': 'Joe'}, function(data){
-    console.log(data);
+//var itf = require('./models/itf')
+//itf.setConnection(mongoose)
+//itf.read( { 'name': 'Joe'}, function(data){
+//    console.log(data);
+//})
+
+// Users tábla model
+
+/*Users.create({
+    'name': 'John Doe',
+    'phone': '0614526161',
+    'email': 'j_d@gmail.com',
+    'address': '1119, Bp Tétényi út 42/B',
+    'role': 3,
+    'meta': {
+        'birthdate': new Date('2015-05-05'),
+        'hobby': 'golf'
+    }
+             }, function( saved ){
+    console.info('Saved model: ', saved);
+})*/
+
+// Users.read( {'role': 1}, function(users){
+//   console.log('Users: ', users);
+// })
+
+Users.first( {'role': 3}, function(user){
+  console.log('User name: ', user.name);
 })
+//    console.log(data);
+
 
 app.set('view engine', 'jade')
 app.set('views', viewDir)
