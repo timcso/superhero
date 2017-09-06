@@ -1,4 +1,4 @@
-$.getJSON('users', function( users ){
+/*$.getJSON('users', function( users ){
     console.log('all users', users);
 });
 
@@ -9,4 +9,9 @@ function checkUser( user ){
     }else {
         return false;
     }
-}
+}*/
+
+var superhero = angular.module("superhero", [])
+superhero.controller("nameController", function($scope){
+    $scope.yourName = 'Joe'
+})

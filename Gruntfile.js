@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: ['src/vendor/jquery/dist/jquery.min.js', 'src/vendor/bootstrap/dist/js/bootstrap.min.js', 'src/vendor/angular/dist/angular.min.js', 'src/js/*.js'],
+        src: ['src/vendor/jquery/dist/jquery.min.js', 'src/vendor/bootstrap/dist/js/bootstrap.min.js', 'src/vendor/angular/angular.js', 'src/js/*.js'],
         dest: 'build/js/all.js'
       }
     },
@@ -54,6 +54,17 @@ module.exports = function(grunt) {
                 dest: 'build/img/'
             }]
         }
+    },
+    cssmin:{
+      options:{
+          shorthandCompacting: false,
+          roundingPrecision: -1
+      },
+      target:{
+        files: {
+            'build/css/all.min.css': ['src/vendor/bootstrap/dist/css/bootstrap.min.css', 'src/vendor/bootstrap/dist/css/bootstrap-theme.min.css']
+        }
+      }
     }
   });
 
@@ -64,9 +75,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   // Default task(s).
-  grunt.registerTask('dev', ['clean', 'copy', 'uglify']);
+  grunt.registerTask('dev', ['clean', 'copy', 'uglify', 'cssmin']);
   grunt.registerTask('default', ['watch']);
 
 };

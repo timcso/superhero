@@ -120,7 +120,7 @@ app.use(function(req, res, next) {
     }
 })
 
-// app.use('/',express.static(staticDir));
+app.use('/',express.static(staticDir));
 
 /*app.get('/', function (req, res) {
     fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
@@ -128,6 +128,7 @@ app.use(function(req, res, next) {
     });
     res.render('index', { title: 'Hellóka!!!!44', message: 'Ma is alkottunk valamit!', users: allUsers})
 });*/
+
 app.get('/', function (req, res) {
   handleUsers(req, res, false, function (allUsers) {
     res.render('index', {
