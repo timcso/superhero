@@ -42,7 +42,8 @@ var viewDir = './src/view'
     'meta': {
         'birthdate': new Date('2015-05-05'),
         'hobby': 'golf'
-    }
+    },
+    'order': []
              }, function( saved ){
     console.info('Saved model: ', saved);
 })*/
@@ -51,11 +52,62 @@ var viewDir = './src/view'
 //   console.log('Users: ', users);
 // })
 
-Users.first( {'role': 3}, function(user){
-  console.log('User name: ', user.name);
+/*
+Users.getModel().remove({'name': new RegExp('jackyy', 'i')}, function(err, data){
+    if(err){
+        console.error(err);
+    }else{
+        console.log(data.result);
+    }
 })
+*/
+
+/*Users.getModel().update(
+    {'name': new RegExp('doe', 'i')},
+    {'girlfriend': 'Laura'},
+    function(err, user){
+      if(err){
+          console.error(err)
+      }
+      // user.name = 'Jack Bauer';
+      // user.save;
+})*/
+
+/*Users.first( {'name': new RegExp('doe', 'i')}, function(user){
+    if( user !== null ){
+      console.log('User name: ', user);
+    } else{
+      console.log('No result found');
+    }
+})*/
 //    console.log(data);
 
+/*Users.getModel().isAdmin(2, function(err, data){
+    console.log(err);
+    console.log(data);
+})*/
+
+//rendelést ment a userhez
+/*Users.first( {'name': new RegExp('John Doe', 'i')}, function(user){
+    if( user !== null ){
+      var order = new Users.getModel( 'Orders' );
+      order._creator = user._id;
+      order.product =  'Hajszárító';
+      order.insDate = new Date('2017-09-23');
+      order.description = 'Ez az első megrendelés';
+      order.amount = 12654;
+      order.deadLine = new Date('2017-09-23');
+      order.save(function(err, data){
+          if(err){
+              console.error(err)
+          }else{
+              console.log('Elmantve: ', data)
+          }
+      })
+    } else{
+      console.log('No result found');
+    }
+})*/
 
 app.set('view engine', 'jade')
 app.set('views', viewDir)
@@ -70,14 +122,23 @@ app.use(function(req, res, next) {
 
 // app.use('/',express.static(staticDir));
 
-app.get('/', function (req, res) {
+/*app.get('/', function (req, res) {
     fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
       res.send(data)
     });
-    res.render('index', { title: 'Hellóka!!!!44', message: 'Ma is alkottunk valamit!'})
+    res.render('index', { title: 'Hellóka!!!!44', message: 'Ma is alkottunk valamit!', users: allUsers})
+});*/
+app.get('/', function (req, res) {
+  handleUsers(req, res, false, function (allUsers) {
+    res.render('index', {
+      title: 'ItFactory Web Superhero',
+      message: 'Yes, it is!',
+      users: allUsers
+    });
+  });
 });
 
-function handleUsers(req, res) {
+/*function handleUsers(req, res) {
     fs.readFile('./users.json', 'utf8', function (err, data) {
         if (err) throw err;
         //var path = req.url.split('/')
@@ -95,9 +156,37 @@ function handleUsers(req, res) {
         
         res.send(JSON.stringify(_user))
     });
+}*/
+function handleUsers(req, res, next, callBack) {
+  fs.readFile('./users.json', 'utf8', function (err, data) {
+    if (err) throw err;
+
+    // var path = req.url.split( '/' );
+    var users = JSON.parse(data);
+
+    if (callBack) {
+      callBack(users);
+      return;
+    }
+
+    var _user = {};
+
+    // Ha nem kaptunk id-t.
+    if (!req.params.id) {
+      _user = users;
+    } else {
+      for (var k in users) {
+        if (req.params.id == users[k].id) {
+          _user = users[k];
+        }
+      }
+    }
+
+    res.send(JSON.stringify(_user));
+  });
 }
 
-app.get('/users*?', function (req, res) {
+app.get('/users/:id*?', function (req, res) {
     console.log(req.url)
     handleUsers(req, res)
 

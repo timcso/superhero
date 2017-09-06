@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: 'src/**/*.js',
+        src: ['src/vendor/jquery/dist/jquery.min.js', 'src/vendor/bootstrap/dist/js/bootstrap.min.js', 'src/vendor/angular/dist/angular.min.js', 'src/js/*.js'],
         dest: 'build/js/all.js'
       }
     },
@@ -24,7 +24,8 @@ module.exports = function(grunt) {
     clean: ['build/**'],
     copy: {
       main: {
-        files: [ {expand: true, cwd: 'src', src: ['**/*.html', 'img/*'], dest: 'build/', filter: 'isFile'} ]
+        files: [ {expand: true, cwd: 'src', src: ['**/*.html', 'img/*'], dest: 'build/', filter: 'isFile'},
+                 {expand: true, cwd: 'src', src: ['vendor/**'], dest: 'build/', filter: 'isFile'}]
       }
     },
     jshint: {
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
 
   // Default task(s).
-  grunt.registerTask('dev', ['jshint', 'clean', 'copy', 'uglify']);
+  grunt.registerTask('dev', ['clean', 'copy', 'uglify']);
   grunt.registerTask('default', ['watch']);
 
 };

@@ -1,21 +1,54 @@
-var db, Users;
+var db, Users, Orders,
+    models = {};
+var mongoose = require('mongoose')
+
 function setConnection( mongodb){
     db = mongodb;
     setModel();
 }
 
 function setModel(){
-  Users = db.model( 'Users', {
-    name: String,
-    phone: String,
-    email: String,
-    address: String,
-    role: Number,
-    meta: {
-        birthdate: Date,
-        hobby: String
+
+    var Schema = mongoose.Schema;
+    var userSchema = new Schema({
+       name: String,
+       phone: String,
+       email: String,
+       address: String,
+       role: Number,
+       meta: {
+          birthdate: Date,
+          hobby: String
+       },
+       orders: [{ type: Schema.Types.ObjectId, ref: 'Orders'}]
+    })
+    userSchema.statics.isAdmin = function(r,callBack){
+      return this.find({'role': {$lte: 2}}, callBack)
     }
-  }, 'Users');
+
+    Users = db.model( 'Users', userSchema, 'Users');
+
+    var orderSchema = new Schema({
+       _creator: {type: Schema.Types.ObjectId, ref: 'Users'},
+       product: String,
+       insDate: Date,
+       description: String,
+       amount: Number,
+       deadLine: Date
+    })
+
+    Orders = db.model( 'Orders', orderSchema, 'Orders');
+
+    models['Users'] = Users;
+    models['Orders'] = Orders;
+}
+
+function getModel( modelName ){
+    if (modelName){
+      return Users
+    }else{
+      return models[modelName];
+    }
 }
 
 function read(where, callBack){
@@ -61,5 +94,6 @@ module.exports = {
     setConnection: setConnection,
     read: read,
     create: create,
-    first: first
+    first: first,
+    getModel: getModel
 }

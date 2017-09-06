@@ -1,0 +1,8 @@
+{
+    "name": "superhero",
+    "dependencies": {
+        "bootstrap": "",
+        "jquery": "",
+        "angular": ""
+    }
+}
