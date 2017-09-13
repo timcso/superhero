@@ -84,7 +84,7 @@ function create(data, callBack){
             console.error('Save error: ', err);
             callBack({});
         } else{
-            callBack( data );
+            callBack( user );
         }
     });
 }

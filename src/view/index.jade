@@ -25,15 +25,15 @@ block content
           // p Más ár: {{ calcOtherprice(yourPrice) | currencyFilter}}
           ul
             //li(data-ng-repeat='user in users')
-            table(class='table table-condensed')
-              thead
-                tr
-                  th(data-ng-repeat='th in ["#", "name", "email", "phone"]') {{th}}
-              tbody
-                tr(data-ng-repeat='row in users')
-                  td {{row._id}}
-                  td {{row.name}}
-                  td {{row.email}}
-                  td {{row.phone}}
+            include ./userTable.jade
+              tr
+                td(data-ng-repeat='th in ths')
+                  input.form-control(data-ng-if='$index>0 && $index<4', data-ng-model='newUser[th]', data-ng-class='{\'is-error\': formError[th]}')
+                  //input(data-ng-if='!$last && !$first', data-ng-model='newUser[th]')
+                  button(type='button', class='btn btn-success', data-ng-click='insertRecord(newUser)', data-ng-if='$last')
+                    span(class='glyphicon glyphicon-fire')
+
+
+
         // each user in users
         // li #{user.id}: #{user.name} - #{user.email}

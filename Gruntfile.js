@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-      files: ['src/**/*.js', 'src/**/*.html', 'src/**/*.css', 'src/**/*.jade', 'Gruntfile.js'],
+      files: ['src/**/*.js', 'src/**/*.html', 'src/**/*.css', 'src/**/*.jade', 'Gruntfile.js', 'src/css/**/*.css'],
       tasks: ['dev'],
       options: {
         spawn: false,
@@ -25,7 +25,8 @@ module.exports = function(grunt) {
     copy: {
       main: {
         files: [ {expand: true, cwd: 'src', src: ['**/*.html', 'img/*'], dest: 'build/', filter: 'isFile'},
-                 {expand: true, cwd: 'src', src: ['vendor/**'], dest: 'build/', filter: 'isFile'}]
+                 //{expand: true, cwd: 'src', src: ['vendor/**'], dest: 'build/', filter: 'isFile'},
+                 {expand: true, cwd: 'src/vendor/bootstrap', src: ['fonts/**'], dest: 'build/', filter: 'isFile'}]
       }
     },
     jshint: {
@@ -62,7 +63,7 @@ module.exports = function(grunt) {
       },
       target:{
         files: {
-            'build/css/all.min.css': ['src/vendor/bootstrap/dist/css/bootstrap.min.css', 'src/vendor/bootstrap/dist/css/bootstrap-theme.min.css']
+            'build/css/all.min.css': ['src/vendor/bootstrap/dist/css/bootstrap.min.css', 'src/vendor/bootstrap/dist/css/bootstrap-theme.min.css', 'src/css/**/*.css']
         }
       }
     }

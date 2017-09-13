@@ -17,23 +17,25 @@ itf.tu(str, function(err, newStr){
 
 mongoose.connect('mongodb://localhost/superhero');
 
-var Users = require('./models/users')
-Users.setConnection(mongoose)
+var models = {}
+models.users = require('./models/users')
+models.users.setConnection(mongoose)
 
 var port = 3333
 var staticDir = 'build'
 var viewDir = './src/view'
-
-// itf tábla model
-//var itf = require('./models/itf')
-//itf.setConnection(mongoose)
-//itf.read( { 'name': 'Joe'}, function(data){
-//    console.log(data);
-//})
+/*
+ itf tábla model
+var itf = require('./models/itf')
+itf.setConnection(mongoose)
+itf.read( { 'name': 'Joe'}, function(data){
+    console.log(data);
+})*/
 
 // Users tábla model
 
-/*Users.create({
+/*
+models.users.create({
     'name': 'John Doe',
     'phone': '0614526161',
     'email': 'j_d@gmail.com',
@@ -46,11 +48,12 @@ var viewDir = './src/view'
     'order': []
              }, function( saved ){
     console.info('Saved model: ', saved);
-})*/
+})
+*/
 
-// Users.read( {'role': 1}, function(users){
-//   console.log('Users: ', users);
-// })
+/*Users.read( {'role': 1}, function(users){
+  console.log('Users: ', users);
+})*/
 
 /*
 Users.getModel().remove({'name': new RegExp('jackyy', 'i')}, function(err, data){
@@ -114,12 +117,68 @@ app.set('views', viewDir)
 
 app.use('/',express.static(staticDir));
 
-app.use(function(req, res, next) {
-    console.log(req.headers['x-requested-with'])
+app.use('/:model/:id*?',function(req, res, next) {
     if (req.headers['x-requested-with'] == 'XMLHttpRequest'){
-      Users.getModel().find({}, function(err, data){
-        res.send(JSON.stringify(data) )
-      })
+      switch(req.method.toLowerCase()){
+        case 'get':
+          models[req.params.model].getModel().find({}, function(err, data){
+          res.send(JSON.stringify(data) )
+          })
+          break
+        case 'post':
+          var reqBody = '';
+          req.on("data", function( package ){
+              reqBody += package
+          })
+          req.on("end", function(){
+            reqBody = JSON.parse(reqBody);
+            var where = {"_id": reqBody._id}
+            var newData = {}
+            for (var k in reqBody){
+                if(k=="_id"){
+                    continue
+                }
+                newData[k]= reqBody[k]
+            }
+            models[req.params.model].getModel().update(where, newData,
+            function(err, data){
+            res.send('{"success": true}')
+          })})
+          break
+        case 'put':
+          var reqBody = '';
+          req.on("data", function( package ){
+              reqBody += package
+          })
+          req.on("end", function(){
+            reqBody = JSON.parse(reqBody);
+            var row = {}
+            for (var k in reqBody){
+              if(k=="_id"){
+                    continue
+              }
+              row[k]= reqBody[k]
+            }
+            models[req.params.model].create(row, function(data){
+              res.send(JSON.stringify(data))
+          })})
+          break
+        case 'delete':
+          var where = {"_id": req.params.id}
+          if(req.params.id){
+            models[req.params.model].getModel().remove(where,
+              function(err, rem){
+                if (err){
+                    res.send({"error": "no id"})
+                    console.error(err)
+                }else{
+                  res.send('{"success": true}')
+                }
+          })}
+          break
+        default:
+          res.send('{"error": "unsupported method"}')
+      }
     } else{
      next();
     }
@@ -190,11 +249,13 @@ function handleUsers(req, res, next, callBack) {
   });
 }
 
+/*
 app.get('/users/:id*?', function (req, res) {
     console.log(req.url)
     handleUsers(req, res)
 
 });
+*/
 
 
 
