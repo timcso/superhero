@@ -3,6 +3,7 @@
     "dependencies": {
         "bootstrap": "",
         "jquery": "",
-        "angular": ""
+        "angular": "",
+        "angular-currency-filter": "git://github.com/cherryApp/angular-currency-filter.git"
     }
 }

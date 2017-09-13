@@ -20,7 +20,7 @@ function setModel(){
           birthdate: Date,
           hobby: String
        },
-       orders: [{ type: Schema.Types.ObjectId, ref: 'Orders'}]
+       //orders: [{ type: Schema.Types.ObjectId, ref: 'Orders'}]
     })
     userSchema.statics.isAdmin = function(r,callBack){
       return this.find({'role': {$lte: 2}}, callBack)
@@ -28,7 +28,7 @@ function setModel(){
 
     Users = db.model( 'Users', userSchema, 'Users');
 
-    var orderSchema = new Schema({
+/*    var orderSchema = new Schema({
        _creator: {type: Schema.Types.ObjectId, ref: 'Users'},
        product: String,
        insDate: Date,
@@ -37,14 +37,14 @@ function setModel(){
        deadLine: Date
     })
 
-    Orders = db.model( 'Orders', orderSchema, 'Orders');
+    Orders = db.model( 'Orders', orderSchema, 'Orders');*/
 
     models['Users'] = Users;
-    models['Orders'] = Orders;
+    // models['Orders'] = Orders;
 }
 
 function getModel( modelName ){
-    if (modelName){
+    if (!modelName){
       return Users
     }else{
       return models[modelName];

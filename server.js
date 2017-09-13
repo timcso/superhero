@@ -112,15 +112,18 @@ Users.getModel().remove({'name': new RegExp('jackyy', 'i')}, function(err, data)
 app.set('view engine', 'jade')
 app.set('views', viewDir)
 
+app.use('/',express.static(staticDir));
+
 app.use(function(req, res, next) {
+    console.log(req.headers['x-requested-with'])
     if (req.headers['x-requested-with'] == 'XMLHttpRequest'){
-      res.send( JSON.stringify( {'hello': 'world'}))
+      Users.getModel().find({}, function(err, data){
+        res.send(JSON.stringify(data) )
+      })
     } else{
      next();
     }
 })
-
-app.use('/',express.static(staticDir));
 
 /*app.get('/', function (req, res) {
     fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {

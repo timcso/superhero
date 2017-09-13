@@ -8,13 +8,13 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: ['src/vendor/jquery/dist/jquery.min.js', 'src/vendor/bootstrap/dist/js/bootstrap.min.js', 'src/vendor/angular/angular.js', 'src/js/*.js'],
+        src: ['src/vendor/jquery/dist/jquery.min.js', 'src/vendor/bootstrap/dist/js/bootstrap.min.js', 'src/vendor/angular/angular.js', 'src/vendor/angular-currency-filter/currencyModule.js', 'src/js/main.js', 'src/js/factory/*.js', 'src/js/controllers/*.js'],
         dest: 'build/js/all.js'
       }
     },
     watch: {
       scripts: {
-      files: ['src/**/*.js', 'src/**/*.html', 'src/**/*.css', 'src/**/*.jade'],
+      files: ['src/**/*.js', 'src/**/*.html', 'src/**/*.css', 'src/**/*.jade', 'Gruntfile.js'],
       tasks: ['dev'],
       options: {
         spawn: false,

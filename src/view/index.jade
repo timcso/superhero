@@ -2,19 +2,38 @@ extends ./layout.jade
 
 block content
   .container
-    .starter-template
+    .starter-div
       h1(class='my-h1' id='h0-01')= title
       h2= message
-      p.lead
-        | Now you can start your own project with
-        a(target='_blank', href='http://getbootstrap.com/') Bootstrap 3.3.7
-        | . This plugin is a fork from
-        a(href='https://github.com/le717/brackets-html-skeleton#readme') HTML Skeleton
-        | .
-      .row
+      .row(data-ng-controller='priceController')
         .col-xs-3
-          input.form-control(type='text', ng-model='yourName')
-          p Hello {{ yourName }} !
-      ul
-        each user in users
-          li #{user.id}: #{user.name} - #{user.email}
+          // input.form-control(type='text', data-ng-model='yourName')
+          input.form-control(type='text', data-ng-model='yourPrice')
+          // p Hello {{ yourName }} !
+          // br
+          p Normál ár: {{ yourPrice | currencyFilter}}
+          p Te árad: {{ calcOwnprice(yourPrice) | currencyFilter}}
+          p Más ár: {{ calcOtherprice(yourPrice) | currencyFilter}}
+      .row(data-ng-controller='userController')
+        .col-xs-12
+          // input.form-control(type='text', data-ng-model='yourName')
+          // input.form-control(type='text', data-ng-model='yourPrice')
+          // p Hello {{ userName }} !
+          // br
+          // p Normál ár: {{ yourPrice | currencyFilter}}
+          // p Te árad: {{ calcOwnprice(yourPrice) | currencyFilter}}
+          // p Más ár: {{ calcOtherprice(yourPrice) | currencyFilter}}
+          ul
+            //li(data-ng-repeat='user in users')
+            table(class='table table-condensed')
+              thead
+                tr
+                  th(data-ng-repeat='th in ["#", "name", "email", "phone"]') {{th}}
+              tbody
+                tr(data-ng-repeat='row in users')
+                  td {{row._id}}
+                  td {{row.name}}
+                  td {{row.email}}
+                  td {{row.phone}}
+        // each user in users
+        // li #{user.id}: #{user.name} - #{user.email}

@@ -11,7 +11,8 @@ function checkUser( user ){
     }
 }*/
 
-var superhero = angular.module("superhero", [])
-superhero.controller("nameController", function($scope){
-    $scope.yourName = 'Joe'
-})
+var superhero = angular.module("superhero", ['currencyModule'])
+
+superhero.run(["$http", function($http){
+  $http.defaults.headers.common['x-requested-with'] = 'XMLHttpRequest'
+}])
