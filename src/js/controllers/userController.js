@@ -20,6 +20,13 @@ superhero.controller("userController",
              console.error('hibaaaa getting user data: ', err)
          })
 
+         userFactory.getOne('59afb3a813263d0504737ebb')
+         .then(function(userData){
+             console.info(userData)
+         }, function(err){
+             console.error('hibaaaa getting user data: ', err)
+         })
+
          $scope.updateRecord = function(row){
              userFactory.saveUser(row)
              .then(function(){

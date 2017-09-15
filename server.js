@@ -2,6 +2,7 @@ var express = require('express')
 var app = express()
 var fs = require('fs')
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser')
 //var itf = require('./my_modules/itf_module')
 
 /*var str = 'Hello new module!'
@@ -115,53 +116,54 @@ Users.getModel().remove({'name': new RegExp('jackyy', 'i')}, function(err, data)
 app.set('view engine', 'jade')
 app.set('views', viewDir)
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use('/',express.static(staticDir));
 
 app.use('/:model/:id*?',function(req, res, next) {
     if (req.headers['x-requested-with'] == 'XMLHttpRequest'){
       switch(req.method.toLowerCase()){
         case 'get':
-          models[req.params.model].getModel().find({}, function(err, data){
-          res.send(JSON.stringify(data) )
+          var where = {}
+          if(req.params.id){
+             where = {"_id": req.params.id}
+          }
+          models[req.params.model].getModel().find(where, function(err, data){
+            if(req.params.id){
+              res.send(JSON.stringify(data[0]) )
+            }else{
+              res.send(JSON.stringify(data) )
+            }
           })
           break
         case 'post':
-          var reqBody = '';
-          req.on("data", function( package ){
-              reqBody += package
-          })
-          req.on("end", function(){
-            reqBody = JSON.parse(reqBody);
-            var where = {"_id": reqBody._id}
-            var newData = {}
-            for (var k in reqBody){
-                if(k=="_id"){
-                    continue
-                }
-                newData[k]= reqBody[k]
-            }
-            models[req.params.model].getModel().update(where, newData,
-            function(err, data){
+          var reqBody = req.body;
+          var where = {"_id": reqBody._id}
+          var newData = {}
+          for (var k in reqBody){
+              if(k=="_id"){
+                  continue
+              }
+              newData[k]= reqBody[k]
+          }
+          models[req.params.model].getModel().update(where, newData,
+          function(err, data){
             res.send('{"success": true}')
-          })})
+          })
           break
         case 'put':
-          var reqBody = '';
-          req.on("data", function( package ){
-              reqBody += package
-          })
-          req.on("end", function(){
-            reqBody = JSON.parse(reqBody);
-            var row = {}
-            for (var k in reqBody){
-              if(k=="_id"){
-                    continue
-              }
-              row[k]= reqBody[k]
+          var reqBody = req.body;
+          var row = {}
+          for (var k in reqBody){
+            if(k=="_id"){
+                continue
             }
-            models[req.params.model].create(row, function(data){
-              res.send(JSON.stringify(data))
-          })})
+            row[k]= reqBody[k]
+          }
+          models[req.params.model].create(row, function(data){
+            res.send(JSON.stringify(data))
+          })
           break
         case 'delete':
           var where = {"_id": req.params.id}

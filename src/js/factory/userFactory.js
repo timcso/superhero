@@ -14,6 +14,16 @@ superhero.factory("userFactory", [
           })
           return deferred.promise
         },
+        getOne: function(id){ //Felhasználó lekérése
+          var deferred = $q.defer()
+          $http.get('/users/' + id)
+           .then(function(serverData){
+            deferred.resolve(serverData.data)
+          }, function(err){
+              deferred.reject(err)
+          })
+          return deferred.promise
+        },
           saveUser: function(row){
             var deferred = $q.defer()
             $http.post('/users', row)

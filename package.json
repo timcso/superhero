@@ -15,7 +15,8 @@
         "grunt-contrib-imagemin": "",
         "grunt-contrib-cssmin": "",
         "jade": "",
-        "mongoose": ""
+        "mongoose": "",
+        "body-parser": ""
     },
     "description": "My first package",
     "license": "MIT"
